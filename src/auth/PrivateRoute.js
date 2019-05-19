@@ -1,5 +1,5 @@
 import React, { memo, lazy, Suspense, useCallback } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 import Layout from 'components/common/layout';
 
