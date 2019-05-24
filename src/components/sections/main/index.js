@@ -6,8 +6,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { withAuth } from 'auth';
 import PrivateRoute from 'auth/PrivateRoute';
 
-const Users = lazy(() => import('components/pages/users'));
 const Login = lazy(() => import('components/pages/login'));
+const Users = lazy(() => import('components/pages/users'));
+const UsersForm = lazy(() => import('components/pages/users-form'));
 
 const styles = {
     main: {
@@ -19,6 +20,8 @@ const styles = {
 };
 
 const Main = ({ authState: { user = {}, isLoading }, classes }) => {
+    const isAdmin = user.type === 'admin';
+
     return (
         <main className={`App ${classes.main}`}>
             <Switch>
@@ -28,15 +31,18 @@ const Main = ({ authState: { user = {}, isLoading }, classes }) => {
                     component={Login}
                 />
                 <PrivateRoute
-                    isLoading={isLoading}
-                    authType={user.type}
-                />
-                <Route
                     exact
-                    path="/"
+                    path="/users"
                     component={Users}
+                    hasAccess={isAdmin}
                 />
-                <Redirect to="/sign-in"/>
+                <PrivateRoute
+                    exact
+                    path="/users/:userId/edit"
+                    component={UsersForm}
+                    hasAccess={isAdmin}
+                />
+                <Redirect to="/users"/>
             </Switch>
         </main>
     );

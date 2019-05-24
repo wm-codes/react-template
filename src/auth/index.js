@@ -1,4 +1,5 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
+
 import Fetch from 'utils/fetch';
 import {
     LOGIN,
@@ -6,10 +7,13 @@ import {
     REGISTER,
     GET_USER_INFO,
 } from 'constants/actionTypes';
+import Snackbar from 'components/common/snackbar';
 
 const defaultAuthState = {
-    isAdmin: false,
     isLoading: false,
+    status: {
+        showMessage: false,
+    },
 };
 
 const AuthContext = React.createContext(defaultAuthState);
@@ -27,13 +31,12 @@ const withAuth = Component => props => (
 class AuthProvider extends PureComponent {
     state = {
         ...defaultAuthState,
-        authMessage: {},
         isResolved: false,
     };
 
     async componentDidMount() {
-        await this.getUserInfo();
-        this.setState({ isResolved: true })
+        window.localStorage.getItem('rToken') && await this.getUserInfo();
+        this.setState({ isResolved: true });
     }
 
     async handleResponse(request, action) {
@@ -41,7 +44,7 @@ class AuthProvider extends PureComponent {
         const response = await request;
 
         if (response && response.errorMessage) {
-            // TODO handle error messages
+            this.showError(response.errorMessage);
             return false;
         }
 
@@ -50,14 +53,22 @@ class AuthProvider extends PureComponent {
                 this.setState({
                     user: response.user,
                 })
-                response && window.localStorage.setItem('rToken', response.token);
+                response.user && window.localStorage.setItem('rToken', response.token);
                 break;
             case GET_USER_INFO:
                 this.setState({
                     user: response,
                 })
                 break;
-            // case REGISTER:
+            case REGISTER:
+                this.setState({
+                    status: {
+                        type: 'success',
+                        message: response.message,
+                        showMessage: true,
+                    }
+                })
+                break;
             case LOGOUT:
                 delete this.state.user;
                 this.setState(defaultAuthState);
@@ -71,7 +82,7 @@ class AuthProvider extends PureComponent {
             isLoading: false,
         });
 
-        return request;
+        return response;
     }
 
     login = async data => await this.handleResponse(
@@ -85,7 +96,7 @@ class AuthProvider extends PureComponent {
     );
 
     logout = async _ => await this.handleResponse(
-        Fetch.get('/logout'),
+        Promise.resolve(), // Logout function actually deletes only token from local storage
         LOGOUT,
     );
 
@@ -93,6 +104,29 @@ class AuthProvider extends PureComponent {
         Fetch.post('/sign-up', { body: data }),
         REGISTER,
     );
+
+    showError(message) {
+        this.setState({
+            status: {
+                type: 'error',
+                showMessage: true,
+                message,
+            }
+        });
+    }
+    
+    handleClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        this.setState({
+            status: {
+                ...this.state.status,
+                showMessage: false,
+            }
+        });
+    };
 
     render() {
         const {
@@ -102,9 +136,16 @@ class AuthProvider extends PureComponent {
             register,
             getUserInfo,
         } = this;
+        const { status } = this.state;
 
         return (
-            <Fragment>
+            <>
+                <Snackbar
+                    open={status.showMessage}
+                    variant={status.type}
+                    message={status.message}
+                    onClose={this.handleClose}
+                />
                 <AuthContext.Provider
                     value={{
                         state,
@@ -118,7 +159,7 @@ class AuthProvider extends PureComponent {
                 >
                     {this.state.isResolved && this.props.children}
                 </AuthContext.Provider>
-            </Fragment>
+            </>
         );
     }
 }

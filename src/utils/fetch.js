@@ -13,9 +13,8 @@ export default class Fetch {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'credentials': 'include',
                 'Content-Language': document.documentElement.lang,
-                'Authorization': 'JWT ' + localStorage.getItem('rToken'),
+                'Authorization': 'JWT ' + localStorage.getItem('rToken'), // needs to be changed because reactin JWT is also the same
                 ...headers,
             },
             credentials: 'include',
@@ -33,12 +32,16 @@ export default class Fetch {
 
         const requestPromise = await fetch(`${REACT_APP_BASE_URL}${path}`, requestOptions);
 
-        if (requestPromise && requestPromise.ok) {
-            const text = await requestPromise.text();
-            return text ? JSON.parse(text) : body;
+        if (requestPromise.status >= 200 && requestPromise.status < 300) {
+            try {
+                return await requestPromise.json();
+            } catch {
+                return { errorMessage: 'Something went wrong' };
+            }
+        } else {
+            const errorMessage = await requestPromise.text();
+            return { errorMessage };
         }
-
-        return body;
     }
 
     /* GET (retrieve) */
