@@ -7,6 +7,9 @@ import { withAuth } from 'auth';
 import PrivateRoute from 'auth/PrivateRoute';
 
 const Login = lazy(() => import('components/pages/login'));
+const Registration = lazy(() => import('components/pages/registration'));
+const ForgotPassword = lazy(() => import('components/pages/forgot-password'));
+const ResetPassword = lazy(() => import('components/pages/reset-password'));
 const Users = lazy(() => import('components/pages/users'));
 const UsersForm = lazy(() => import('components/pages/users-form'));
 
@@ -29,6 +32,21 @@ const Main = ({ authState: { user = {}, isLoading }, classes }) => {
                     exact
                     path="/sign-in"
                     component={Login}
+                />
+                <Route
+                    exact
+                    path="/sign-up"
+                    component={Registration}
+                />
+                <Route
+                    exact
+                    path="/forgot-password"
+                    component={ForgotPassword}
+                />
+                <Route
+                    exact
+                    path="/reset-password"
+                    component={ResetPassword}
                 />
                 <PrivateRoute
                     exact
