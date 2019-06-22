@@ -70,7 +70,6 @@ class AuthProvider extends PureComponent {
                 })
                 break;
             case LOGOUT:
-                delete this.state.user;
                 this.setState(defaultAuthState);
                 window.localStorage.removeItem('rToken');
                 break;

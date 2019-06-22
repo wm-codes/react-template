@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import { withAuth } from 'auth';
 import Form from 'components/common/form';
@@ -15,16 +16,18 @@ class SignIn extends PureComponent {
         }
     };
     render() {
-        return (
-            <Form
-                title="Sign In"
-                hasEmail
-                hasPassword
-                hidePasswordTitle
-                footerRegister
-                onSubmit={this.handleSubmit}
-            />
-        );
+        return !localStorage.getItem('rToken')
+            ? (
+                <Form
+                    title="Sign In"
+                    hasEmail
+                    hasPassword
+                    hidePasswordTitle
+                    footerRegister
+                    onSubmit={this.handleSubmit}
+                />
+            )
+            : <Redirect to="/" />
     }
 }
 
