@@ -10,24 +10,30 @@ const Login = lazy(() => import('components/pages/login'));
 const Registration = lazy(() => import('components/pages/registration'));
 const ForgotPassword = lazy(() => import('components/pages/forgot-password'));
 const ResetPassword = lazy(() => import('components/pages/reset-password'));
+const Landing = lazy(() => import('components/pages/landing'));
 const Users = lazy(() => import('components/pages/users'));
 const UsersForm = lazy(() => import('components/pages/users-form'));
 
 const styles = {
     main: {
         position: 'relative',
-        top: '70px',
+        marginTop: 70,
         width: '100%',
         height: '100%',
     },
 };
 
 const Main = ({ authState: { user = {}, isLoading }, classes }) => {
-    const isAdmin = user.type === 'admin';
+    const isAdmin = user.type === 'user';
 
     return (
         <main className={`App ${classes.main}`}>
             <Switch>
+                <Route
+                    exact
+                    path="/"
+                    component={Landing}
+                />
                 <Route
                     exact
                     path="/sign-in"
