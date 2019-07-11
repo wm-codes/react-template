@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import classNames from 'classnames';
 
-const styles = {
+const styles = makeStyles({
     busyWrapper: {
         position: 'relative',
         width: '100%',
@@ -23,10 +23,11 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
     },
-};
+});
 
+const Loader = () => {
+    const classes = styles();
 
-function Loader({ classes }) {
     return (
         <div className={classNames(classes.busyWrapper)}>
             <div className={`${classes.loaderContainer}`}>
@@ -36,4 +37,4 @@ function Loader({ classes }) {
     );
 }
 
-export default withStyles(styles)(Loader);
+export default memo(Loader);

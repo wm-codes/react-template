@@ -2,7 +2,7 @@ import React, {memo} from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-const useFooterStyles = makeStyles({
+const styles = makeStyles({
     footer: {
         backgroundColor: '#11131b',
         color: '#fff',
@@ -41,7 +41,7 @@ const useFooterStyles = makeStyles({
 });
 
 const Footer = () => {
-    const classes = useFooterStyles();
+    const classes = styles();
 
     return (
         <footer className={classes.footer}>
