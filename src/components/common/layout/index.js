@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -18,9 +18,10 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import Button from '@material-ui/core/Button';
+
+import People from '@material-ui/icons/People';
+import Dashboard from '@material-ui/icons/Dashboard';
 
 import { withAuth } from 'auth';
 
@@ -169,24 +170,24 @@ class MiniDrawer extends React.Component {
                     </div>
                     <Divider />
                     <List>
-                        {['Users'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
+
+                        <ListItem button key={'Dashboard'}>
+                            <ListItemIcon>
+                                <Dashboard/>
+                            </ListItemIcon>
+                            <ListItemText primary={'Dashboard'} />
+                        </ListItem>
+
+                        <ListItem button key={'Users'}>
+                            <ListItemIcon>
+                                <People/>
+                            </ListItemIcon>
+
+                            <ListItemText primary={'Users'} />
+                        </ListItem>
+
                     </List>
                     <Divider />
-                    {/* <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List> */}
                 </Drawer>
                 <main className={classes.content}>{this.props.children}</main>
             </div>

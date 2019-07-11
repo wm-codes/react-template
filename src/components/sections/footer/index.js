@@ -1,11 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {memo} from 'react';
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = {
+const useFooterStyles = makeStyles({
     footer: {
         backgroundColor: '#11131b',
         color: '#fff',
@@ -41,10 +38,10 @@ const styles = {
         color: '#8f8f91',
         padding: 5,
     },
-};
+});
 
-function Footer(props) {
-    const { classes } = props;
+const Footer = () => {
+    const classes = useFooterStyles();
 
     return (
         <footer className={classes.footer}>
@@ -114,8 +111,4 @@ function Footer(props) {
     );
 }
 
-Footer.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(Footer);
+export default memo(Footer);

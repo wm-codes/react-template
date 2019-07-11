@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
+const styles = makeStyles({
     nav: {
         marginLeft: 100,
         height: '100%',
@@ -31,9 +31,11 @@ const styles = theme => ({
     },
 });
 
-class Nav extends PureComponent {
+const Nav = () => {
 
-    handleClick = e => {
+    const classes = styles();
+
+    const handleClick = e => {
         document.getElementById('services').scrollIntoView({
             behavior: "smooth",
             block: "start",
@@ -41,19 +43,15 @@ class Nav extends PureComponent {
         });
     }
 
-    render() {
-        const { classes, isLoggedIn } = this.props;
-
-        return (
-            <nav className={`${classes.nav} flex horizontal`}>
-                <ul className="flex horizontal jCenter aCenter">
-                    <li>
-                        <Link to="#services" onClick={this.handleClick}>Services</Link>
-                    </li>
-                </ul>
-            </nav>
-        );
-    }
+    return (
+        <nav className={`${classes.nav} flex horizontal`}>
+            <ul className="flex horizontal jCenter aCenter">
+                <li>
+                    <Link to="#services" onClick={handleClick}>Services</Link>
+                </li>
+            </ul>
+        </nav>
+    );
 }
 
-export default withStyles(styles)(Nav);
+export default memo(Nav);

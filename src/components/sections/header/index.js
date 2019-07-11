@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { memo } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 
@@ -9,7 +9,7 @@ import { withAuth } from 'auth';
 
 import Nav from './nav';
 
-const styles = theme => ({
+const styles = makeStyles({
     header: {
         position: 'fixed',
         width: '100%',
@@ -58,68 +58,61 @@ const styles = theme => ({
     },
 });
 
-class Header extends PureComponent {
-    forgetButtonCLickHandler = () => this.setState({
-        isForgetPopupOpen: true,
-        isLoginPopupOpen: false,
-    });
+const Header = ({ authState: { user = {}, isLoading }, authActions, history }) => {
+    const classes = styles();
 
-    handleLogout = e => {
+    const handleLogout = e => {
         e.preventDefault();
 
-        this.props.authActions.logout();
-        this.props.history.push('/');
+        authActions.logout();
+        history.push('/');
     }
 
-    render() {
-        const { classes, authState } = this.props;
-
-        return (
-            <AppBar
-                className={classes.header}
-                position="fixed"
-                color="default"
-            >
-                <div className="content flex horizontal jBetween aCenter">
-                    <div className={classes.logo}>
-                        <Link to="/">
-                            <img
-                                alt="Reactin Logo"
-                                src="https://cloudinary-res.cloudinary.com/image/upload/v1538583988/cloudinary_logo_for_white_bg.svg"
-                                width="120"
-                            />
-                        </Link>
-                    </div>
-                    <Nav isLoggedIn={!!authState.user} />
-                    {!authState.user && !authState.isLoading
-                        ? (
-                            <ul className={`${classes.entry} flex horizontal noGrow`}>
-                                <li>
-                                    <Button
-                                        color="inherit"
-                                        variant="outlined"
-                                    >
-                                        <Link to="/sign-in">
-                                            Sign In
-                                        </Link>
-                                    </Button>
-                                </li>
-                            </ul>
-                        )
-                        : (
-                            <Button
-                                color="inherit"
-                                variant="outlined"
-                                onClick={this.handleLogout}
-                            >
-                                Sign Out
-                            </Button>
-                        )
-                    }
+    return (
+        <AppBar
+            className={classes.header}
+            position="fixed"
+            color="default"
+        >
+            <div className="content flex horizontal jBetween aCenter">
+                <div className={classes.logo}>
+                    <Link to="/">
+                        <img
+                            alt="Reactin Logo"
+                            src="https://cloudinary-res.cloudinary.com/image/upload/v1538583988/cloudinary_logo_for_white_bg.svg"
+                            width="120"
+                        />
+                    </Link>
                 </div>
-            </AppBar>
-        );
-    }
+                <Nav isLoggedIn={!!user} />
+                {!user && !isLoading
+                    ? (
+                        <ul className={`${classes.entry} flex horizontal noGrow`}>
+                            <li>
+                                <Button
+                                    color="inherit"
+                                    variant="outlined"
+                                >
+                                    <Link to="/sign-in">
+                                        Sign In
+                                    </Link>
+                                </Button>
+                            </li>
+                        </ul>
+                    )
+                    : (
+                        <Button
+                            color="inherit"
+                            variant="outlined"
+                            onClick={handleLogout}
+                        >
+                            Sign Out
+                        </Button>
+                    )
+                }
+            </div>
+        </AppBar>
+    );
 }
 
-export default withRouter(withAuth(withStyles(styles)(Header)));
+export default withRouter(withAuth(memo(Header)));

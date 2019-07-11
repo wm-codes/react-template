@@ -52,13 +52,13 @@ class AuthProvider extends PureComponent {
             case LOGIN:
                 this.setState({
                     user: response.user,
-                })
+                });
                 response.user && window.localStorage.setItem('rToken', response.token);
                 break;
             case GET_USER_INFO:
                 this.setState({
                     user: response,
-                })
+                });
                 break;
             case REGISTER:
                 this.setState({
@@ -67,7 +67,7 @@ class AuthProvider extends PureComponent {
                         message: response.message,
                         showMessage: true,
                     }
-                })
+                });
                 break;
             case LOGOUT:
                 this.setState(defaultAuthState);
