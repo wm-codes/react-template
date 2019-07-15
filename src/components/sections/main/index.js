@@ -80,7 +80,7 @@ const Main = ({ authState: { user = {}, isLoading } }) => {
                 {/*    component={UsersForm}*/}
                 {/*    hasAccess={isAdmin}*/}
                 {/*/>*/}
-                <Redirect to="/admin/dashboard"/>
+                <Redirect to="/"/>
             </Switch>
         </main>
     );
