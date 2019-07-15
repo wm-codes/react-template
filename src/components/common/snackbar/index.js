@@ -62,7 +62,7 @@ const variantIcon = {
 const SimpleSnackbar = (props) => {
     const classes = styles();
 
-    const Icon = variantIcon[props.variant];
+    const Icon = variantIcon[props.variant] || InfoIcon;
 
     return (
         <Snackbar
@@ -76,9 +76,9 @@ const SimpleSnackbar = (props) => {
                 className={classNames(classes[props.variant], props.className)}
                 message={
                     <span id="client-snackbar" className={classes.message}>
-                            <Icon className={classNames(classes.icon, classes.iconVariant)} />
+                        <Icon className={classNames(classes.icon, classes.iconVariant)}/>
                         {props.message}
-                        </span>
+                    </span>
                 }
                 action={[
                     <IconButton
@@ -88,7 +88,7 @@ const SimpleSnackbar = (props) => {
                         className={classes.close}
                         onClick={props.onClose}
                     >
-                        <CloseIcon className={classes.icon} />
+                        <CloseIcon className={classes.icon}/>
                     </IconButton>,
                 ]}
             />

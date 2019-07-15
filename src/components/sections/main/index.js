@@ -15,7 +15,7 @@ const Landing = lazy(() => import('components/pages/landing'));
 //private routers
 const Dashboard = lazy(() => import('components/pages/dashboard'));
 const Users = lazy(() => import('components/pages/users'));
-const UsersForm = lazy(() => import('components/pages/users-form'));
+// const UsersForm = lazy(() => import('components/pages/users-form'));
 
 const useStyles = makeStyles({
     main: {
@@ -74,12 +74,12 @@ const Main = ({ authState: { user = {}, isLoading } }) => {
                     component={Users}
                     hasAccess={isAdmin}
                 />
-                <PrivateRoute
-                    exact
-                    path="/admin/users/:userId/edit"
-                    component={UsersForm}
-                    hasAccess={isAdmin}
-                />
+                {/*<PrivateRoute*/}
+                {/*    exact*/}
+                {/*    path="/admin/users/:userId/edit"*/}
+                {/*    component={UsersForm}*/}
+                {/*    hasAccess={isAdmin}*/}
+                {/*/>*/}
                 <Redirect to="/admin/dashboard"/>
             </Switch>
         </main>

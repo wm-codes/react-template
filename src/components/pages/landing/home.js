@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { memo } from 'react';
 
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
-const styles = {
+const styles = makeStyles({
     home: {
         width: '100%',
         height: 'calc(100vh - 70px)',
@@ -42,40 +42,36 @@ const styles = {
             },
         },
     },
-};
+});
 
-class Home extends PureComponent {    
-    render() {
-        const { classes } = this.props;
+const Home = () => {
 
-        return (
-            <section className={classes.home}>
-                <div className={classes.mainTitle}>
-                    <h1>Here can be your slogan</h1>
-                    <h2>The open source Headless CMS for Front-End Developers</h2>
-                    <div className={classes.actions}>
-                        <Button
-                            color="default"
-                            variant="contained"
-                            onClick={this.handleGetStarted}
-                        >
-                            Get Started
-                        </Button>
-                        <Button
-                            // color="primary"
-                            variant="contained"
-                            onClick={this.handleWatchTheDemo}
-                        >
-                            Watch the demo
-                        </Button>
-                    </div>
-                </div>
-                <div>
-                    <video>Video</video>
-                </div>
-            </section>
-        )
+    const classes = styles();
+
+    const handleGetStarted = () => {
+        //some code
     }
+
+    return (
+        <section className={classes.home}>
+            <div className={classes.mainTitle}>
+                <h1>Here can be your slogan</h1>
+                <h2>The open source Headless CMS for Front-End Developers</h2>
+                <div className={classes.actions}>
+                    <Button
+                        color="default"
+                        variant="contained"
+                        onClick={handleGetStarted}
+                    >
+                        Get Started
+                    </Button>
+                </div>
+            </div>
+            <div>
+                <video>Video</video>
+            </div>
+        </section>
+    )
 }
 
-export default withStyles(styles)(Home);
+export default memo(Home);
