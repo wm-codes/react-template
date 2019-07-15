@@ -1,34 +1,34 @@
-import React, { PureComponent } from 'react';
+import React, { memo } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import { withAuth } from 'auth';
 import Form from 'components/common/form';
 
-class SignIn extends PureComponent {
-    handleSubmit = async ({ email, password }) => {
-        const user = await this.props.authActions.login({
+const SignIn = ({authActions, history}) => {
+
+    const handleSubmit = async ({ email, password }) => {
+        const user = await authActions.login({
             email,
             password,
         });
 
         if (user) {
-            this.props.history.push('/users');
+            history.push('/users');
         }
     };
-    render() {
-        return !localStorage.getItem('rToken')
-            ? (
-                <Form
-                    title="Sign In"
-                    hasEmail
-                    hasPassword
-                    hidePasswordTitle
-                    footerRegister
-                    onSubmit={this.handleSubmit}
-                />
-            )
-            : <Redirect to="/" />
-    }
+
+    return !localStorage.getItem('rToken')
+        ? (
+            <Form
+                title="Sign In"
+                hasEmail
+                hasPassword
+                hidePasswordTitle
+                footerRegister
+                onSubmit={handleSubmit}
+            />
+        )
+        : <Redirect to="/" />
 }
 
-export default withAuth(SignIn);
+export default withAuth(memo(SignIn));

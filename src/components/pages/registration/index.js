@@ -1,27 +1,25 @@
-import React, { PureComponent } from 'react';
+import React, { memo } from 'react';
 
 import { withAuth } from 'auth';
 import Form from 'components/common/form';
 
-class SignUp extends PureComponent {
-    handleSubmit = ({ email, password }) => {
-        this.props.authActions.register({
+const SignUp = ({authActions}) => {
+    const handleSubmit = ({ email, password }) => {
+        authActions.register({
             email,
             password,
         });        
     };
 
-    render() {
-        return (
-            <Form
-                title="Sign Up"
-                hasEmail
-                hasPassword
-                hasConfirmPassword
-                onSubmit={this.handleSubmit}
-            />
-        );
-    }
+    return (
+        <Form
+            title="Sign Up"
+            hasEmail
+            hasPassword
+            hasConfirmPassword
+            onSubmit={handleSubmit}
+        />
+    );
 }
 
-export default withAuth(SignUp);
+export default withAuth(memo(SignUp));
