@@ -1,5 +1,5 @@
 import React from 'react';
-import clsx from 'clsx';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -149,7 +149,7 @@ const EnhancedTableToolbar = props => {
 
     return (
         <Toolbar
-            className={clsx(classes.root, {
+            className={classNames(classes.root, {
                 [classes.highlight]: numSelected > 0,
             })}
         >

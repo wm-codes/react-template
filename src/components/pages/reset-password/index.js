@@ -5,7 +5,7 @@ import qs from 'query-string';
 import { withAuth } from 'auth';
 import Form from 'components/common/form';
 
-const ResetPassword = ({authActions, history}) => {
+const ResetPassword = ({ authActions, history }) => {
     const handleSubmit = ({ password, confirmPassword }) => {
         authActions.reset({
             password,
@@ -25,6 +25,6 @@ const ResetPassword = ({authActions, history}) => {
                 onSubmit={handleSubmit}
             />
         );
-}
+};
 
 export default withAuth(memo(ResetPassword));

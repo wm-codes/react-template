@@ -25,7 +25,7 @@ import { withAuth } from 'auth';
 
 const drawerWidth = 240;
 
-const styles = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
     },
@@ -104,9 +104,9 @@ const MiniDrawer = ({children, authActions, history}) => {
     const handleSignOut = async () => {
         await authActions.logout();
         history.push('/sign-in');
-    }
+    };
 
-    const classes = styles();
+    const classes = useStyles();
 
     return (
         <div className={classes.root}>
@@ -162,7 +162,6 @@ const MiniDrawer = ({children, authActions, history}) => {
                 </div>
                 <Divider />
                 <List>
-
                     <ListItem button key={'Dashboard'}>
                         <Link to={'/admin/dashboard'}>
                             <ListItemIcon>
@@ -171,7 +170,6 @@ const MiniDrawer = ({children, authActions, history}) => {
                             <ListItemText primary={'Dashboard'} />
                         </Link>
                     </ListItem>
-
                     <ListItem button key={'Users'}>
                         <Link to={'/admin/users'}>
                             <ListItemIcon>
@@ -181,7 +179,6 @@ const MiniDrawer = ({children, authActions, history}) => {
                             <ListItemText primary={'Users'} />
                         </Link>
                     </ListItem>
-
                 </List>
                 <Divider />
             </Drawer>

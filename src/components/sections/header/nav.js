@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     nav: {
         marginLeft: 100,
         height: '100%',
@@ -33,7 +33,7 @@ const styles = makeStyles({
 
 const Nav = () => {
 
-    const classes = styles();
+    const classes = useStyles();
 
     const handleClick = e => {
         document.getElementById('services').scrollIntoView({
@@ -41,7 +41,7 @@ const Nav = () => {
             block: "start",
             inline: 'start'
         });
-    }
+    };
 
     return (
         <nav className={`${classes.nav} flex horizontal`}>
@@ -52,6 +52,6 @@ const Nav = () => {
             </ul>
         </nav>
     );
-}
+};
 
 export default memo(Nav);

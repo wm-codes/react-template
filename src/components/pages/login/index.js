@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { withAuth } from 'auth';
 import Form from 'components/common/form';
 
-const SignIn = ({authActions, history}) => {
+const SignIn = ({ authActions, history }) => {
 
     const handleSubmit = async ({ email, password }) => {
         const user = await authActions.login({
@@ -29,6 +29,6 @@ const SignIn = ({authActions, history}) => {
             />
         )
         : <Redirect to="/" />
-}
+};
 
 export default withAuth(memo(SignIn));

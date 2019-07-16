@@ -20,5 +20,4 @@ const PrivateRoute = ({ hasAccess, component: Component, ...rest }) => (
     />
 )
 
-
 export default memo(PrivateRoute);
