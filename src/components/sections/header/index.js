@@ -9,7 +9,7 @@ import { withAuth } from 'auth';
 
 import Nav from './nav';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     header: {
         position: 'fixed',
         width: '100%',
@@ -59,7 +59,7 @@ const styles = makeStyles({
 });
 
 const Header = ({ authState: { user = {}, isLoading }, authActions, history }) => {
-    const classes = styles();
+    const classes = useStyles();
 
     const handleLogout = e => {
         e.preventDefault();

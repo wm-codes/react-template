@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 // import LockOpen from '@material-ui/icons/LockOpen';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     services: {
         padding: 25,
         height: 'calc(100vh - 70px)',
@@ -59,10 +59,10 @@ const styles = makeStyles({
 });
 
 const Services = () => {
-    const classes = styles();
+    const classes = useStyles();
 
     return (
-        <section className={classes.services} id="services">
+        <section className={classes.services}>
             <div className={classes.header}>
                 <h3>Services.</h3>
                 <h4>Services Subtitle</h4>
@@ -136,6 +136,6 @@ const Services = () => {
             </div>
         </section>
     )
-}
+};
 
 export default memo(Services);

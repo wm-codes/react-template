@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     home: {
         width: '100%',
         height: 'calc(100vh - 70px)',
@@ -46,7 +46,7 @@ const styles = makeStyles({
 
 const Home = () => {
 
-    const classes = styles();
+    const classes = useStyles();
 
     const handleGetStarted = () => {
         //some code
@@ -72,6 +72,6 @@ const Home = () => {
             </div>
         </section>
     )
-}
+};
 
 export default memo(Home);

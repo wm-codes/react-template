@@ -15,8 +15,10 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = {
+
+const useStyles = makeStyles(theme => ({
     form: {
         maxWidth: '700px',
         margin: '0 auto',
@@ -29,9 +31,11 @@ const styles = {
             marginRight: 15,
         },
     },
-};
+}));
 
-function UsersForm({ classes }) {
+function UsersForm() {
+    const classes = useStyles();
+
     return (
         <form
             className={classes.form}
@@ -96,6 +100,6 @@ function UsersForm({ classes }) {
             </div>
         </form>
     )
-}
+};
 
 export default withStyles(styles)(memo(UsersForm));

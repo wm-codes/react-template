@@ -11,7 +11,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import {
     checkEmailValidation,
@@ -19,7 +19,7 @@ import {
     checkConfirmPasswordValidation,
 } from 'utils/validate';
 
-const styles = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
     main: {
         width: 'auto',
         display: 'block', // Fix IE 11 issue.
@@ -58,7 +58,16 @@ const styles = makeStyles(theme => ({
     },
 }));
 
-const Form = (props) => {
+const Form = ({
+    title,
+    preface,
+    hidePasswordTitle,
+    footerRegister,
+    onSubmit,
+    hasEmail,
+    hasPassword,
+    hasConfirmPassword,
+}) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -92,34 +101,22 @@ const Form = (props) => {
     const handleSubmit = e => {
         e.preventDefault();
 
-        props.onSubmit({
+        onSubmit({
             email: email,
             password: password,
             confirmPassword: confirmPassword,
         });
-    }
+    };
 
     const checkIfDisabled = () => {
-
-        const hasEmailError = props.hasEmail && (!email || emailError);
-        const hasPasswordError = props.hasPassword && (!password || passwordError);
-        const hasConfirmPasswordError = props.hasConfirmPassword && (!confirmPassword || confirmPasswordError);
+        const hasEmailError = hasEmail && (!email || emailError);
+        const hasPasswordError = hasPassword && (!password || passwordError);
+        const hasConfirmPasswordError = hasConfirmPassword && (!confirmPassword || confirmPasswordError);
 
         return hasEmailError || hasPasswordError || hasConfirmPasswordError;
-    }
+    };
 
-
-    const {
-        title,
-        preface,
-        hasEmail,
-        hasPassword,
-        hasConfirmPassword,
-        hidePasswordTitle,
-        footerRegister,
-    } = props;
-
-    const classes = styles();
+    const classes = useStyles();
 
     return (
         <section className={classes.main}>

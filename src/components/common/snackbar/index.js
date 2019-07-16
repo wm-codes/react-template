@@ -13,14 +13,14 @@ import amber from '@material-ui/core/colors/amber';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 
-const styles = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
     snackbar: {
         '& div': {
             flexWrap: 'nowrap',
         },
     },
     close: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     success: {
         backgroundColor: green[600],
@@ -49,7 +49,7 @@ const styles = makeStyles(theme => ({
 
 const defaultSnackbarPosition = {
     vertical: "top",
-    horizontal: "right"
+    horizontal: "right",
 };
 
 const variantIcon = {
@@ -59,8 +59,8 @@ const variantIcon = {
     info: InfoIcon,
 };
 
-const SimpleSnackbar = (props) => {
-    const classes = styles();
+const SimpleSnackbar = props => {
+    const classes = useStyles();
 
     const Icon = variantIcon[props.variant] || InfoIcon;
 
@@ -94,6 +94,6 @@ const SimpleSnackbar = (props) => {
             />
         </Snackbar>
     );
-}
+};
 
 export default memo(SimpleSnackbar);

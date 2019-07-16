@@ -3,9 +3,7 @@ import React, { memo } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
-import classNames from 'classnames';
-
-const styles = makeStyles({
+const useStyles = makeStyles({
     busyWrapper: {
         position: 'relative',
         width: '100%',
@@ -26,15 +24,15 @@ const styles = makeStyles({
 });
 
 const Loader = () => {
-    const classes = styles();
+    const classes = useStyles();
 
     return (
-        <div className={classNames(classes.busyWrapper)}>
-            <div className={`${classes.loaderContainer}`}>
+        <div className={classes.busyWrapper}>
+            <div className={classes.loaderContainer}>
                 <CircularProgress />
             </div>
         </div>
     );
-}
+};
 
 export default memo(Loader);

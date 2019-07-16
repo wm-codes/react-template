@@ -5,19 +5,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import { withAuth } from 'auth';
 import Form from 'components/common/form';
 
-const styles = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
     text: {
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
         textAlign: 'center',
     },
-    preface: {
-
-    }
 }));
 
-const ForgotPassword = ({authActions}) => {
-    const classes = styles();
+const ForgotPassword = ({ authActions }) => {
+    const classes = useStyles();
 
     const handleSubmit = ({ email }) => {
         authActions.forgot({
@@ -38,6 +35,6 @@ const ForgotPassword = ({authActions}) => {
             onSubmit={handleSubmit}
         />
     );
-}
+};
 
 export default withAuth(memo(ForgotPassword));

@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import { withAuth } from 'auth';
 import Form from 'components/common/form';
 
-const SignUp = ({authActions}) => {
+const SignUp = ({ authActions }) => {
     const handleSubmit = ({ email, password }) => {
         authActions.register({
             email,
@@ -20,6 +20,6 @@ const SignUp = ({authActions}) => {
             onSubmit={handleSubmit}
         />
     );
-}
+};
 
 export default withAuth(memo(SignUp));
