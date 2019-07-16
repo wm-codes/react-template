@@ -32,7 +32,7 @@ const Main = ({ authState: { user = {}, isLoading } }) => {
     let isAdmin = user.type === 'user';
 
     //remove in live
-    isAdmin = true;
+    // isAdmin = true;
 
     return (
         <main className={`App ${classes.main}`}>
