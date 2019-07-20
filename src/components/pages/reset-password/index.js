@@ -1,17 +1,20 @@
-import React, { memo } from 'react';
+import React, { memo, useContext, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 import qs from 'query-string';
 
-import { withAuth } from 'auth';
+import { AuthContext } from 'auth';
 import Form from 'components/common/form';
 
-const ResetPassword = ({ authActions, history }) => {
-    const handleSubmit = ({ password, confirmPassword }) => {
+const ResetPassword = ({ history }) => {
+
+    const { actions: authActions } = useContext(AuthContext);
+
+    const handleSubmit = useCallback(({ password, confirmPassword }) => {
         authActions.reset({
             password,
             confirm_password: confirmPassword,
         });
-    };
+    }, [authActions]);
 
     const params = qs.parse(history.location.search);
 
@@ -27,4 +30,4 @@ const ResetPassword = ({ authActions, history }) => {
         );
 };
 
-export default withAuth(memo(ResetPassword));
+export default memo(ResetPassword);

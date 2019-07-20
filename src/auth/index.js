@@ -16,17 +16,7 @@ const defaultAuthState = {
     },
 };
 
-const AuthContext = React.createContext(defaultAuthState);
-
-const withAuth = Component => props => (
-    <AuthContext.Consumer>
-        {value => <Component
-            {...props}
-            authState={value.state}
-            authActions={value.actions}
-        />}
-    </AuthContext.Consumer>
-);
+export const AuthContext = React.createContext(defaultAuthState);
 
 class AuthProvider extends PureComponent {
     state = {
@@ -162,7 +152,5 @@ class AuthProvider extends PureComponent {
         );
     }
 }
-
-export { withAuth };
 
 export default AuthProvider;

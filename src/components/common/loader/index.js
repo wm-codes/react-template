@@ -24,6 +24,7 @@ const useStyles = makeStyles({
 });
 
 const Loader = () => {
+
     const classes = useStyles();
 
     return (

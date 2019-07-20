@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -10,7 +10,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
@@ -75,38 +74,39 @@ const Form = ({
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+    const classes = useStyles();
 
-    const handleEmailChange = e => {
+    const handleEmailChange = useCallback(e => {
         const value = e.target.value;
 
         setEmail(value);
         setEmailError(!checkEmailValidation(value));
-    };
+    }, []);
 
-    const handlePasswordChange = e => {
+    const handlePasswordChange = useCallback(e => {
         const value = e.target.value;
 
         setPassword(value);
         setPasswordError(!checkPasswordValidation(value));
         setConfirmPasswordError(confirmPassword && !checkConfirmPasswordValidation(confirmPassword, value));
-    };
+    }, [confirmPassword]);
 
-    const handleConfirmPasswordChange = e => {
+    const handleConfirmPasswordChange = useCallback(e => {
         const value = e.target.value;
 
         setConfirmPassword(value);
         setConfirmPasswordError(!checkConfirmPasswordValidation(value, password));
-    };
+    }, [password]);
 
-    const handleSubmit = e => {
+    const handleSubmit = useCallback(e => {
         e.preventDefault();
 
         onSubmit({
-            email: email,
-            password: password,
-            confirmPassword: confirmPassword,
+            email,
+            password,
+            confirmPassword,
         });
-    };
+    }, [onSubmit, email, password, confirmPassword]);
 
     const checkIfDisabled = () => {
         const hasEmailError = hasEmail && (!email || emailError);
@@ -115,8 +115,6 @@ const Form = ({
 
         return hasEmailError || hasPasswordError || hasConfirmPasswordError;
     };
-
-    const classes = useStyles();
 
     return (
         <section className={classes.main}>

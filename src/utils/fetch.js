@@ -1,5 +1,6 @@
 const { REACT_APP_BASE_URL } = process.env;
 
+
 export default class Fetch {
     static async fetch(path, options) {
         const {

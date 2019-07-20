@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Dashboard = () => (
-    <div className={useStyles().classes.root}>Dashboard</div>
+    <div className={useStyles().root}>Dashboard</div>
 );
 
 export default memo(Dashboard);

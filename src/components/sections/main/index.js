@@ -1,9 +1,9 @@
-import React, { memo, lazy } from 'react';
+import React, { memo, lazy, useContext } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { withAuth } from 'auth';
+import { AuthContext } from 'auth';
 import PrivateRoute from 'auth/PrivateRoute';
 
 const Login = lazy(() => import('components/pages/login'));
@@ -26,8 +26,11 @@ const useStyles = makeStyles({
     },
 });
 
-const Main = ({ authState: { user = {}, isLoading } }) => {
+const Main = () => {
+
     const classes = useStyles();
+
+    const { state: { user = {} } } = useContext(AuthContext);
 
     let isAdmin = user.type === 'user';
 
@@ -86,4 +89,4 @@ const Main = ({ authState: { user = {}, isLoading } }) => {
     );
 };
 
-export default withAuth(memo(Main));
+export default memo(Main);

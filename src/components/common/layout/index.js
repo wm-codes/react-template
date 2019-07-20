@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -17,11 +17,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
-
 import People from '@material-ui/icons/People';
 import Dashboard from '@material-ui/icons/Dashboard';
 
-import { withAuth } from 'auth';
+import { AuthContext } from 'auth';
 
 const drawerWidth = 240;
 
@@ -93,20 +92,22 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const MiniDrawer = ({children, authActions, history}) => {
+const MiniDrawer = ({ children, history }) => {
 
     const [open, changeOpen] = useState(false);
 
-    const handleDrawerOpen = () => changeOpen(true);
-
-    const handleDrawerClose = () => changeOpen(false);
-
-    const handleSignOut = async () => {
-        await authActions.logout();
-        history.push('/sign-in');
-    };
+    const Auth = useContext(AuthContext);
 
     const classes = useStyles();
+
+    const handleDrawerOpen = useCallback(() => changeOpen(true), []);
+
+    const handleDrawerClose = useCallback(() => changeOpen(false), []);
+
+    const handleSignOut = useCallback(async () => {
+        await Auth.actions.logout();
+        history.push('/sign-in');
+    }, [Auth.actions, history]);
 
     return (
         <div className={classes.root}>
@@ -187,4 +188,4 @@ const MiniDrawer = ({children, authActions, history}) => {
     );
 }
 
-export default withRouter(withAuth(MiniDrawer));
+export default withRouter(MiniDrawer);

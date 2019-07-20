@@ -11,7 +11,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
 import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -33,7 +32,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function UsersForm() {
+const UsersForm = () => {
+
     const classes = useStyles();
 
     return (
@@ -102,4 +102,4 @@ function UsersForm() {
     )
 };
 
-export default withStyles(styles)(memo(UsersForm));
+export default memo(UsersForm);

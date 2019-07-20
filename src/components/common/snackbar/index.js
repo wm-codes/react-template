@@ -60,6 +60,7 @@ const variantIcon = {
 };
 
 const SimpleSnackbar = props => {
+
     const classes = useStyles();
 
     const Icon = variantIcon[props.variant] || InfoIcon;

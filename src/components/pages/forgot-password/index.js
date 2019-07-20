@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React, { memo, useContext, useCallback } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { withAuth } from 'auth';
+import { AuthContext } from 'auth';
 import Form from 'components/common/form';
 
 const useStyles = makeStyles(theme => ({
@@ -13,14 +13,17 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ForgotPassword = ({ authActions }) => {
+const ForgotPassword = () => {
+
+    const { actions: authActions } = useContext(AuthContext);
+
     const classes = useStyles();
 
-    const handleSubmit = ({ email }) => {
+    const handleSubmit = useCallback(({ email }) => {
         authActions.forgot({
             email,
         });
-    };
+    }, [authActions]);
 
     return (
         <Form
@@ -37,4 +40,4 @@ const ForgotPassword = ({ authActions }) => {
     );
 };
 
-export default withAuth(memo(ForgotPassword));
+export default memo(ForgotPassword);

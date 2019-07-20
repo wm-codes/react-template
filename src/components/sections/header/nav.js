@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -35,13 +35,13 @@ const Nav = () => {
 
     const classes = useStyles();
 
-    const handleClick = e => {
+    const handleClick = useCallback(e => {
         document.getElementById('services').scrollIntoView({
             behavior: "smooth",
             block: "start",
-            inline: 'start'
+            inline: 'start',
         });
-    };
+    }, []);
 
     return (
         <nav className={`${classes.nav} flex horizontal`}>

@@ -71,7 +71,7 @@ const Home = () => {
                 <video>Video</video>
             </div>
         </section>
-    )
-};
+    );
+}
 
 export default memo(Home);

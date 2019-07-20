@@ -1,15 +1,18 @@
-import React, { memo } from 'react';
+import React, { memo, useContext, useCallback } from 'react';
 
-import { withAuth } from 'auth';
+import { AuthContext } from 'auth';
 import Form from 'components/common/form';
 
-const SignUp = ({ authActions }) => {
-    const handleSubmit = ({ email, password }) => {
+const SignUp = () => {
+
+    const { actions: authActions } = useContext(AuthContext);
+
+    const handleSubmit = useCallback(({ email, password }) => {
         authActions.register({
             email,
             password,
         });        
-    };
+    }, [authActions]);
 
     return (
         <Form
@@ -22,4 +25,4 @@ const SignUp = ({ authActions }) => {
     );
 };
 
-export default withAuth(memo(SignUp));
+export default memo(SignUp);

@@ -1,11 +1,11 @@
-import React, { memo } from 'react';
+import React, { memo, useContext, useCallback } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 
-import { withAuth } from 'auth';
+import { AuthContext } from 'auth';
 
 import Nav from './nav';
 
@@ -58,15 +58,18 @@ const useStyles = makeStyles({
     },
 });
 
-const Header = ({ authState: { user = {}, isLoading }, authActions, history }) => {
+const Header = ({ history }) => {
+
     const classes = useStyles();
 
-    const handleLogout = e => {
+    const { state: { user = {}, isLoading }, actions: authActions } = useContext(AuthContext);
+
+    const handleLogout = useCallback(e => {
         e.preventDefault();
 
         authActions.logout();
         history.push('/');
-    }
+    }, [authActions, history]);
 
     return (
         <AppBar
@@ -115,4 +118,4 @@ const Header = ({ authState: { user = {}, isLoading }, authActions, history }) =
     );
 }
 
-export default withRouter(withAuth(memo(Header)));
+export default withRouter(memo(Header));

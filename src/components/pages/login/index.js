@@ -1,21 +1,23 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { withAuth } from 'auth';
+import { AuthContext } from 'auth';
 import Form from 'components/common/form';
 
-const SignIn = ({ authActions, history }) => {
+const SignIn = ({ history }) => {
 
-    const handleSubmit = async ({ email, password }) => {
+    const { actions: authActions } = useContext(AuthContext);
+
+    const handleSubmit = useCallback(async ({ email, password }) => {
         const user = await authActions.login({
             email,
             password,
         });
 
         if (user) {
-            history.push('/users');
+            history.push('admin/users');
         }
-    };
+    }, [authActions, history]);
 
     return !localStorage.getItem('rToken')
         ? (
@@ -31,4 +33,4 @@ const SignIn = ({ authActions, history }) => {
         : <Redirect to="/" />
 };
 
-export default withAuth(memo(SignIn));
+export default memo(SignIn);
