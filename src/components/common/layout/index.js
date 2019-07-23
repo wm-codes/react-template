@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react';
+import React, { useState, useCallback } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -20,7 +20,7 @@ import Button from '@material-ui/core/Button';
 import People from '@material-ui/icons/People';
 import Dashboard from '@material-ui/icons/Dashboard';
 
-import { AuthContext } from 'auth';
+import { useAuthStore } from 'auth';
 
 const drawerWidth = 240;
 
@@ -96,7 +96,7 @@ const MiniDrawer = ({ children, history }) => {
 
     const [open, changeOpen] = useState(false);
 
-    const Auth = useContext(AuthContext);
+    const { actions: authActions } = useAuthStore();
 
     const classes = useStyles();
 
@@ -105,9 +105,9 @@ const MiniDrawer = ({ children, history }) => {
     const handleDrawerClose = useCallback(() => changeOpen(false), []);
 
     const handleSignOut = useCallback(async () => {
-        await Auth.actions.logout();
+        await authActions.logout();
         history.push('/sign-in');
-    }, [Auth.actions, history]);
+    }, [authActions, history]);
 
     return (
         <div className={classes.root}>

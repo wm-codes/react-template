@@ -1,11 +1,11 @@
-import React, { memo, useContext, useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 
-import { AuthContext } from 'auth';
+import { useAuthStore } from 'auth';
 import Form from 'components/common/form';
 
 const SignUp = () => {
 
-    const { actions: authActions } = useContext(AuthContext);
+    const { actions: authActions } = useAuthStore();
 
     const handleSubmit = useCallback(({ email, password }) => {
         authActions.register({

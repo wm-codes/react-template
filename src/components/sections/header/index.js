@@ -1,11 +1,11 @@
-import React, { memo, useContext, useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 
-import { AuthContext } from 'auth';
+import { useAuthStore } from 'auth';
 
 import Nav from './nav';
 
@@ -62,7 +62,7 @@ const Header = ({ history }) => {
 
     const classes = useStyles();
 
-    const { state: { user = {}, isLoading }, actions: authActions } = useContext(AuthContext);
+    const { state: { user = {}, isLoading }, actions: authActions } = useAuthStore();
 
     const handleLogout = useCallback(e => {
         e.preventDefault();

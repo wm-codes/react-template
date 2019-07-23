@@ -1,8 +1,8 @@
-import React, { memo, useContext, useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { AuthContext } from 'auth';
+import { useAuthStore } from 'auth';
 import Form from 'components/common/form';
 
 const useStyles = makeStyles(theme => ({
@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
 
 const ForgotPassword = () => {
 
-    const { actions: authActions } = useContext(AuthContext);
+    const { actions: authActions } = useAuthStore();
 
     const classes = useStyles();
 

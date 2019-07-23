@@ -1,13 +1,13 @@
-import React, { memo, useContext, useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 import qs from 'query-string';
 
-import { AuthContext } from 'auth';
+import { useAuthStore } from 'auth';
 import Form from 'components/common/form';
 
 const ResetPassword = ({ history }) => {
 
-    const { actions: authActions } = useContext(AuthContext);
+    const { actions: authActions } = useAuthStore();
 
     const handleSubmit = useCallback(({ password, confirmPassword }) => {
         authActions.reset({

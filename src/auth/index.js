@@ -1,4 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useState, 
+    useCallback,
+} from 'react';
 
 import Fetch from 'utils/fetch';
 import {
@@ -10,147 +16,142 @@ import {
 import Snackbar from 'components/common/snackbar';
 
 const defaultAuthState = {
-    isLoading: false,
     status: {
+        isLoading: false,
         showMessage: false,
-    },
+    }
 };
 
-export const AuthContext = React.createContext(defaultAuthState);
+const AuthContext = createContext(defaultAuthState);
 
-class AuthProvider extends PureComponent {
-    state = {
-        ...defaultAuthState,
-        isResolved: false,
-    };
+export const useAuthStore = () => useContext(AuthContext);
 
-    async componentDidMount() {
-        window.localStorage.getItem('rToken') && await this.getUserInfo();
-        this.setState({ isResolved: true });
-    }
+export const AuthProvider = ({ children }) => {
+    const [isResolved, setIsResolved] = useState(false);
+    const [status, setStatus] = useState(defaultAuthState.status);
+    const [user, setUser] = useState(null);
+        
+    const handleClose = useCallback((event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
 
-    async handleResponse(request, action) {
-        this.setState({ isLoading: true });
+        setStatus(prevStatus => ({
+            ...prevStatus,
+            showMessage: false,
+        }));
+        
+    }, []);
+
+    const showError = useCallback(message => {
+        setStatus({
+            type: 'error',
+            showMessage: true,
+            message,
+            isLoading: false,
+        });
+    }, []);
+    
+    const handleResponse = useCallback(async (request, action) => {
         const response = await request;
 
         if (response && response.errorMessage) {
-            this.showError(response.errorMessage);
+            showError(response.errorMessage);
             return false;
         }
 
-        switch (action) {
+        setStatus({
+            ...status,
+            isLoading: true,
+        });
+
+        switch (action.type) {
             case LOGIN:
-                this.setState({
-                    user: response.user,
-                });
+                setUser(response.user);
                 response.user && window.localStorage.setItem('rToken', response.token);
                 break;
             case GET_USER_INFO:
-                this.setState({
-                    user: response,
-                });
+                setUser(response);
                 break;
             case REGISTER:
-                this.setState({
-                    status: {
-                        type: 'success',
-                        message: response.message,
-                        showMessage: true,
-                    }
+                setStatus({
+                    type: 'success',
+                    message: response.message,
+                    showMessage: true,
                 });
                 break;
             case LOGOUT:
-                this.setState(defaultAuthState);
+                setUser(null);
+                setStatus(defaultAuthState.status);
                 window.localStorage.removeItem('rToken');
                 break;
             default:
                 break;
         }
 
-        this.setState({
+        setStatus({
+            ...status,
             isLoading: false,
         });
 
         return response;
-    }
+      }, [showError, status]);
 
-    login = async data => await this.handleResponse(
+    const login = useCallback(async data => await handleResponse(
         Fetch.post('/sign-in', { body: data }),
         LOGIN,
-    );
+    ), [handleResponse]);
 
-    getUserInfo = async _ => await this.handleResponse(
+    const getUserInfo = useCallback(async () => await handleResponse(
         Fetch.get('/api/users/info'),
         GET_USER_INFO,
-    );
-
-    logout = async _ => await this.handleResponse(
+    ), [handleResponse]);
+    
+    const logout = useCallback(async () => await handleResponse(
         Promise.resolve(), // Logout function actually deletes only token from local storage
         LOGOUT,
-    );
-
-    register = async data => await this.handleResponse(
+    ), [handleResponse]);
+    
+    const register = useCallback(async data => await handleResponse(
         Fetch.post('/sign-up', { body: data }),
         REGISTER,
-    );
-
-    showError(message) {
-        this.setState({
-            status: {
-                type: 'error',
-                showMessage: true,
-                message,
-            }
-        });
-    }
+    ), [handleResponse]);
     
-    handleClose = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
+    useEffect(() => {
+        async function getUserData() {
+            window.localStorage.getItem('rToken') && await getUserInfo();
+            setIsResolved(true);
         }
 
-        this.setState({
-            status: {
-                ...this.state.status,
-                showMessage: false,
-            }
-        });
-    };
+        getUserData();
+    }, [isResolved, getUserInfo]);
 
-    render() {
-        const {
-            state,
-            login,
-            logout,
-            register,
-            getUserInfo,
-        } = this;
-        const { status } = this.state;
-
-        return (
-            <>
-                <Snackbar
-                    open={status.showMessage}
-                    variant={status.type}
-                    message={status.message}
-                    onClose={this.handleClose}
-                />
-                <AuthContext.Provider
-                    value={{
-                        state,
-                        actions: {
-                            login,
-                            logout,
-                            register,
-                            getUserInfo,
-                        },
-                    }}
-                >
-                    {this.state.isResolved && this.props.children}
-                </AuthContext.Provider>
-            </>
-        );
-    }
-}
+    return (
+        <>
+            <Snackbar
+                open={status.showMessage}
+                variant={status.type}
+                message={status.message}
+                onClose={handleClose}
+            />
+            <AuthContext.Provider
+                value={{
+                    state: {
+                        status,
+                        user,
+                    },
+                    actions: {
+                        login,
+                        register,
+                        logout,
+                        getUserInfo,
+                    },
+                }}
+            >
+                {isResolved && children}
+            </AuthContext.Provider>
+        </>
+    );
+};
 
 export default AuthProvider;

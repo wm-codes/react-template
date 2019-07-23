@@ -1,9 +1,9 @@
-import React, { memo, lazy, useContext } from 'react';
+import React, { memo, lazy } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { AuthContext } from 'auth';
+import { useAuthStore } from 'auth';
 import PrivateRoute from 'auth/PrivateRoute';
 
 const Login = lazy(() => import('components/pages/login'));
@@ -30,9 +30,9 @@ const Main = () => {
 
     const classes = useStyles();
 
-    const { state: { user = {} } } = useContext(AuthContext);
+    const { state: { user = {} } } = useAuthStore();
 
-    let isAdmin = user.type === 'user';
+    let isAdmin = user && user.type === 'user';
 
     //remove in live
     isAdmin = true;
