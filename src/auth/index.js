@@ -4,6 +4,8 @@ import React, {
     useEffect,
     useState, 
     useCallback,
+    useReducer,
+    useMemo,
 } from 'react';
 
 import Fetch from 'utils/fetch';
@@ -15,22 +17,45 @@ import {
 } from 'constants/actionTypes';
 import Snackbar from 'components/common/snackbar';
 
-const defaultAuthState = {
-    status: {
-        isLoading: false,
-        showMessage: false,
+const AuthContext = createContext({});
+
+const actionReducer = (state, { action, payload }) => {
+    switch (action.type) {
+        case LOGIN:
+            payload.user && window.localStorage.setItem('rToken', payload.token);
+
+            return {
+                ...state,
+                user: payload.user,
+            };
+        case GET_USER_INFO:
+            return {
+                ...state,
+                user: payload,
+            };
+        case REGISTER:
+            return {
+                ...state,
+            };
+        case LOGOUT:
+            window.localStorage.removeItem('rToken');
+
+            return {
+                user: null,
+            };
+        default:
+            return {
+                ...state,
+            };
     }
-};
-
-const AuthContext = createContext(defaultAuthState);
-
-export const useAuthStore = () => useContext(AuthContext);
+}
 
 export const AuthProvider = ({ children }) => {
     const [isResolved, setIsResolved] = useState(false);
-    const [status, setStatus] = useState(defaultAuthState.status);
-    const [user, setUser] = useState(null);
-        
+    const [status, setStatus] = useState({ showMessage: false });
+    const [isLoading, setIsLoading] = useState(false);
+    const [state, dispatch] = useReducer(actionReducer, {});
+
     const handleClose = useCallback((event, reason) => {
         if (reason === "clickaway") {
             return;
@@ -48,11 +73,10 @@ export const AuthProvider = ({ children }) => {
             type: 'error',
             showMessage: true,
             message,
-            isLoading: false,
         });
     }, []);
     
-    const handleResponse = useCallback(async (request, action) => {
+    const handleResponse = useCallback(async (request, actionType) => {
         const response = await request;
 
         if (response && response.errorMessage) {
@@ -60,42 +84,25 @@ export const AuthProvider = ({ children }) => {
             return false;
         }
 
-        setStatus({
-            ...status,
-            isLoading: true,
+        setIsLoading(true);
+
+        dispatch({
+            action: { type: actionType },
+            payload: response,
         });
 
-        switch (action.type) {
-            case LOGIN:
-                setUser(response.user);
-                response.user && window.localStorage.setItem('rToken', response.token);
-                break;
-            case GET_USER_INFO:
-                setUser(response);
-                break;
-            case REGISTER:
-                setStatus({
-                    type: 'success',
-                    message: response.message,
-                    showMessage: true,
-                });
-                break;
-            case LOGOUT:
-                setUser(null);
-                setStatus(defaultAuthState.status);
-                window.localStorage.removeItem('rToken');
-                break;
-            default:
-                break;
+        setIsLoading(false);
+
+        if (actionType === REGISTER) {
+            setStatus({
+                type: 'success',
+                message: response.message,
+                showMessage: true,
+            });
         }
 
-        setStatus({
-            ...status,
-            isLoading: false,
-        });
-
         return response;
-      }, [showError, status]);
+      }, [showError]);
 
     const login = useCallback(async data => await handleResponse(
         Fetch.post('/sign-in', { body: data }),
@@ -116,7 +123,7 @@ export const AuthProvider = ({ children }) => {
         Fetch.post('/sign-up', { body: data }),
         REGISTER,
     ), [handleResponse]);
-    
+
     useEffect(() => {
         async function getUserData() {
             window.localStorage.getItem('rToken') && await getUserInfo();
@@ -125,6 +132,13 @@ export const AuthProvider = ({ children }) => {
 
         getUserData();
     }, [isResolved, getUserInfo]);
+
+    const memoizedActions = useMemo(() => ({
+        login,
+        register,
+        logout,
+        getUserInfo,
+    }), [login, register, logout, getUserInfo]);
 
     return (
         <>
@@ -138,14 +152,10 @@ export const AuthProvider = ({ children }) => {
                 value={{
                     state: {
                         status,
-                        user,
+                        isLoading,
+                        user: state.user,
                     },
-                    actions: {
-                        login,
-                        register,
-                        logout,
-                        getUserInfo,
-                    },
+                    actions: memoizedActions,
                 }}
             >
                 {isResolved && children}
@@ -153,5 +163,7 @@ export const AuthProvider = ({ children }) => {
         </>
     );
 };
+
+export const useAuthStore = () => useContext(AuthContext);
 
 export default AuthProvider;
